@@ -48,39 +48,58 @@ require_once(dirname(__FILE__) . '/MailChimp.php');
 
 function esl_send_form()
 {
-    try {
-        if (empty($_POST['toEmail1']) || empty($_POST['fromName'])) {
-            throw new Exception('Bad form parameters. Check the markup to make sure you are naming the inputs correctly.');
-        }
-        if (!is_email($_POST['toEmail1'])) {
-            throw new Exception('Email address 1 is not formatted correctly.');
-        }
-        if (!is_email($_POST['toEmail2'])) {
-          throw new Exception('Email address 2 is not formatted correctly.');
-      }
-        if (!is_email($_POST['toEmail3'])) {
-          throw new Exception('Email address 3 is not formatted correctly.');
-        }
-   
-        $fromName    = sanitize_text_field( $_POST["fromName"] );
-        $fromEmail   = sanitize_email( $_POST['fromEmail'] );
-        $toEmail1   = sanitize_email( $_POST['toEmail1'] );
-        $toEmail2   = sanitize_email( $_POST['toEmail2'] );
-        $toEmail3   = sanitize_email( $_POST['toEmail3'] );
+    $i=0;
+    $validToEmails = array();
+    $options = get_option('esl_fields');
 
-        $headers = 'From: My Blog Contact Form <contact@myblog.com>';
-        $send_to = "chad@flap.tv";
+    try {
+        if (empty($_POST['fromName'])) {
+            throw new Exception('Missing from name.');
+        }
+        if (count($_POST['toEmail'])==0) {
+            throw new Exception('You must enter at least one recipient.');
+        }
+        foreach ($_POST['toEmail'] as $toEmail) {
+            $i++;
+            if (! empty($toEmail) && ! is_email($toEmail)) {
+                throw new Exception('Email address ' . $i . ' is not formatted correctly.');
+            } else {
+                $validToEmails[]=sanitize_email($toEmail);
+            }
+        }
+        if (! isset($_POST['ecard-super-light-save-nonce']) || ! wp_verify_nonce($_POST['ecard-super-light-save-nonce'], 'ecard-submit')) {
+            throw new Exception('Invalid nonce');
+        }
+
+        $fromName    = sanitize_text_field($_POST["fromName"]);
+        
+        $fromEmail   = sanitize_email($_POST['fromEmail']);
+
+        $testEmails = implode($validToEmails, '<BR>');
+
+        // if no fromEmail set, use blog admin e-mail //
+        $adminFrom = ($options['fromEmail'] ? $options['fromEmail']  : get_option( 'admin_email' ));
+        
+        if (! is_email($adminFrom)){
+          throw new Exception('The e-card has an invalid From address configuration.');
+        }
+        if (! $adminFrom){
+          throw new Exception('You have not set a From: address is the plugin, and your Wordpress install does not have an admin e-mail set');
+        }
+
+        $headers = 'From: '.$fromName.' <'.$adminFrom.'>';
+        $send_to = 'chad@flap.tv';
         $subject = "An E-card From WeRepair.org";
-        $message = "Message from ".$_POST['fromName'].": \n\n ". $_POST['toEmail1'] . " \n\n Reply to: " . $_POST['toEmail1'];
+        $message = "Message from ".$fromName.": \n\n ". $testEmails  . " \n\n Reply to: " . $toEmail3;
    
         if (wp_mail($send_to, $subject, $message, $headers)) {
-            echo json_encode(array('status' => 'success', 'message' => 'Contact message sent.'));
+            echo json_encode(array('status' => 'success', 'message' => 'message sent to '. $testEmails . ' from ' . $adminFrom ));
             exit;
         } else {
             throw new Exception('Failed to send email. Check AJAX handler.');
         }
     } catch (Exception $e) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage() . ' attempt to sent to '. $testEmails . ' from ' . $adminFrom));
         exit;
     }
 }

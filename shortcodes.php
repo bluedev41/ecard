@@ -59,9 +59,10 @@ function esl_shortcode()
   <p><label for="fromEmail">Your E-mail:</label><input type="text" name="fromEmail" class="input"></p>
 
     <label for="toEmail1">To:<small>(up to 3 individuals may receive the e-card)</small></label>
-  <p><input type="text" name="toEmail1" placeholder="email@domain.com" class="input"></p>
-  <p><input type="text" name="toEmail2" placeholder="email@domain.com" class="input"></p>
-  <p><input type="text" name="toEmail3" placeholder="email@domain.com" class="input"></p>
+  <p><input type="text" name="toEmail[]" placeholder="email@domain.com" class="input"></p>
+  <p><input type="text" name="toEmail[]" placeholder="email@domain.com" class="input"></p>
+  <p><input type="text" name="toEmail[]" placeholder="email@domain.com" class="input"></p>
+    <?php wp_nonce_field( 'ecard-submit','ecard-super-light-save-nonce' ); ?>
   <p><input type="submit" value="Deliver Card" class="button" />
     </form>
     </div>

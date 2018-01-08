@@ -40,7 +40,7 @@ jQuery(document)
                 error: handleFormError,
                 success: function (data) {
                     if (data.status === 'success') {
-                        alert('Your Card Has Been Delivered!');
+                        alert('Your Card Has Been Delivered! ' + data.message);
                     } else {
                         alert (data.message);
                         handleFormError();
@@ -56,11 +56,13 @@ jQuery(document)
 
         function validateInputs() {
             var fromName = $('#esl-form input[name="fromName"]').val();
-            var toEmail1 = $('#esl-form input[name="toEmail1"]').val();
+            var fromEmail = $('#esl-form input[name="fromEmail"]').val();
+            var toEmail = $('#esl-form input[name="toEmail[]"]').val();
                 // add validation that a gallery image is selected //
-                
-            if (! fromName || ! toEmail1) {
-                alert('Before sending, please make sure to provide your name ' + fromName + 'and an e-mail' + toEmail1);
+            
+            
+            if (! fromName || ! toEmail || ! fromEmail) {
+                alert('Please make sure to provide your name and an e-mail');
                 return false;
             }
             return true;
