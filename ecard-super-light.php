@@ -53,10 +53,21 @@ function esl_send_form()
             throw new Exception('Bad form parameters. Check the markup to make sure you are naming the inputs correctly.');
         }
         if (!is_email($_POST['toEmail1'])) {
-            throw new Exception('Email address not formatted correctly.');
+            throw new Exception('Email address 1 is not formatted correctly.');
+        }
+        if (!is_email($_POST['toEmail2'])) {
+          throw new Exception('Email address 2 is not formatted correctly.');
+      }
+        if (!is_email($_POST['toEmail3'])) {
+          throw new Exception('Email address 3 is not formatted correctly.');
         }
    
-        $subject = 'Contact Form: '.$reason.' - '.$_POST['toEmail1'];
+        $fromName    = sanitize_text_field( $_POST["fromName"] );
+        $fromEmail   = sanitize_email( $_POST['fromEmail'] );
+        $toEmail1   = sanitize_email( $_POST['toEmail1'] );
+        $toEmail2   = sanitize_email( $_POST['toEmail2'] );
+        $toEmail3   = sanitize_email( $_POST['toEmail3'] );
+
         $headers = 'From: My Blog Contact Form <contact@myblog.com>';
         $send_to = "chad@flap.tv";
         $subject = "An E-card From WeRepair.org";

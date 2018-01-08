@@ -19,10 +19,16 @@ class Submenu_Page
     public function plugin_admin_init()
     {
         register_setting('esl_fields', 'esl_fields', 'plugin_options_validate');
+        
         add_settings_section('esl_main_section', 'Main Settings', array($this,'settings_section_callback'), 'esl_fields');
-        add_settings_field('plugin_setting_images', 'Image Selection', array($this,'plugin_setting_images'), 'esl_fields', 'esl_main_section');
+        add_settings_field('plugin_setting_images', 'Image Selection:', array($this,'plugin_setting_images'), 'esl_fields', 'esl_main_section');
+        
+        add_settings_section('esl_email_section', 'Mail Settings', array($this,'settings_section_callback'), 'esl_fields');
+        add_settings_field('plugin_setting_from_email', 'From Email:', array($this,'plugin_setting_from_email'), 'esl_fields', 'esl_email_section');
+        add_settings_field('plugin_setting_from_name', 'From Name:', array($this,'plugin_setting_from_name'), 'esl_fields', 'esl_email_section');
+        
         add_settings_section('esl_mailchimp_section', 'MailChimp Settings', array($this,'settings_section_callback'), 'esl_fields');
-        add_settings_field('plugin_setting_api', 'MailChimp API Key', array($this,'plugin_setting_api'), 'esl_fields', 'esl_mailchimp_section');
+        add_settings_field('plugin_setting_api', 'MailChimp API Key:', array($this,'plugin_setting_api'), 'esl_fields', 'esl_mailchimp_section');
     }
     
     public function settings_section_callback($args)
@@ -47,11 +53,45 @@ class Submenu_Page
         }
     }
     
+    public function plugin_setting_from_email()
+    {
+        
+           // Create mail fields
+        $options = get_option('esl_fields');
+        
+        if (!empty($options['fromEmail'])) {
+            $value = $options['fromEmail'];
+        } else {
+            $value = '';
+        }
+        print '<p><input name="esl_fields[fromEmail]" placeholder="youremail@thisdomain.com" id="esl_fields[fromEmail]" type="text" value="' .  $value . '" />';
+        print '<p class="description">The e-mail address from which your card will be sent</p>';
+        
+        register_setting('esl_fields', 'fromEmail');
+    }
+
+    public function plugin_setting_from_name()
+    {
+        
+           // Create mail fields
+        $options = get_option('esl_fields');
+        
+        if (!empty($options['fromName'])) {
+            $value = $options['fromName'];
+        } else {
+            $value = '';
+        }
+        print '<p><input name="esl_fields[fromName]" placeholder="Your Name" id="esl_fields[fromName]" type="text" value="' .  $value . '" />';
+        print '<p class="description">The name from which your card will be sent</p>';
+        
+        register_setting('esl_fields', 'fromName');
+    }
+
     public function plugin_setting_api()
     {
         
         // Create field for MailChimp API Key
-       
+    
         $options = get_option('esl_fields');
         
         if (!empty($options['mailchimp_api_key'])) {
@@ -64,7 +104,7 @@ class Submenu_Page
         
         register_setting('esl_fields', 'mailchimp_api_key');
         
-        $options = get_option('esl_fields');
+        //$options = get_option('esl_fields');
     }
     
     public function image_uploader_code($name, $width, $height, $number)
