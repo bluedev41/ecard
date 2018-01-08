@@ -1,6 +1,13 @@
 jQuery(document)
     .ready(function ($) {
+
+        // set up an object to store slider information to pass to submit
+        // should just figure out how to grab it from sliderPro
         
+        window.sliderInfo = {
+            currentSlide: '0'
+        };
+
         // set up slider
 
         $('#my-esl-slider').sliderPro({
@@ -18,6 +25,18 @@ jQuery(document)
             autoplay: false
         });
 
+        $('#my-esl-slider').on('gotoSlide', function (event) 
+        {
+            let currentSlide = 0;
+            if (typeof event.index === "undefined") {
+                currentSlide = 0;
+            } else {
+                currentSlide = event.index;
+            }
+            window.sliderInfo.currentSlide = currentSlide;
+            console.log(window.sliderInfo.currentSlide);
+        })
+
         // process ajax contact form
 
         var is_sending = false;
@@ -28,7 +47,14 @@ jQuery(document)
                 return false;
             }
             e.preventDefault();
-            var $this = $(this); 
+
+            var $this = $(this);
+            alert('current slide is::: ' + window.sliderInfo.currentSlide);
+
+            $this.push({currentSlide: window.sliderInfo.currentSlide});
+
+            console.log($this.serialize());
+
             $.ajax({
                 url: esl_data.ajax_url,
                 type: 'post',
@@ -42,7 +68,7 @@ jQuery(document)
                     if (data.status === 'success') {
                         alert('Your Card Has Been Delivered! ' + data.message);
                     } else {
-                        alert (data.message);
+                        alert(data.message);
                         handleFormError();
                     }
                 }
@@ -58,10 +84,9 @@ jQuery(document)
             var fromName = $('#esl-form input[name="fromName"]').val();
             var fromEmail = $('#esl-form input[name="fromEmail"]').val();
             var toEmail = $('#esl-form input[name="toEmail[]"]').val();
-                // add validation that a gallery image is selected //
-            
-            
-            if (! fromName || ! toEmail || ! fromEmail) {
+            // add validation that a gallery image is selected //
+
+            if (!fromName || !toEmail || !fromEmail) {
                 alert('Please make sure to provide your name and an e-mail');
                 return false;
             }

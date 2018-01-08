@@ -22,7 +22,6 @@ function esl_shortcode()
     $i = 0;
     foreach ($options['images'] as $key => $val) {
         if ($val) {
-            $i++;
             $image_attributes = wp_get_attachment_image_src($options['images'][$key], array(600, 400));
             $src = $image_attributes[0];
             // echo '<img data-src="' . $src . '" src="' . $src . '" width="' . $width . 'px" height="' . $height . 'px" />';
@@ -31,6 +30,7 @@ function esl_shortcode()
                         <img class="sp-image" src="' . $src . '"/>
                         <p class="sp-layer">consectetur adipisicing elit</p>
                     </div>';
+            $i++;
         }
     } ?>
 	</div>
@@ -39,14 +39,13 @@ function esl_shortcode()
     $i = 0;
     foreach ($options['images'] as $key => $val) {
         if ($val) {
-            $i++;
-
             $image_attributes = wp_get_attachment_image_src($options['images'][$key], array(600, 400));
             $src = $image_attributes[0];
             // echo '<img data-src="' . $src . '" src="' . $src . '" width="' . $width . 'px" height="' . $height . 'px" />';
             echo '<!-- Slide ' . $i . ' thumbnail -->
 
                     <img class="sp-thumbnail" src="' . plugins_url('/public/images/loading.png', __FILE__) . '" data-src="' . $src . '"/>';
+            $i++;
         }
     } ?>
 	</div>
@@ -62,7 +61,7 @@ function esl_shortcode()
   <p><input type="text" name="toEmail[]" placeholder="email@domain.com" class="input"></p>
   <p><input type="text" name="toEmail[]" placeholder="email@domain.com" class="input"></p>
   <p><input type="text" name="toEmail[]" placeholder="email@domain.com" class="input"></p>
-    <?php wp_nonce_field( 'ecard-submit','ecard-super-light-save-nonce' ); ?>
+    <?php wp_nonce_field('ecard-submit', 'ecard-super-light-save-nonce'); ?>
   <p><input type="submit" value="Deliver Card" class="button" />
     </form>
     </div>
