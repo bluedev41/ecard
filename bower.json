@@ -1,0 +1,24 @@
+{
+  "name": "ecard-super-light",
+  "homepage": "http://flap.tv",
+  "description": "Super Light Ecard Tool",
+  "main": "",
+  "keywords": [
+    "ecard"
+  ],
+  "authors": [
+    "Chad Lieberman",
+    "Plattion"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "slider-pro": "^1.2.2"
+  }
+}

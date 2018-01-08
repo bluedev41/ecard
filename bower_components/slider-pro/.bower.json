@@ -1,0 +1,36 @@
+{
+  "name": "slider-pro",
+  "version": "1.2.2",
+  "description": "Responsive jQuery slider, featuring modular architecture, CSS3 animations, touch swipe, animated layers, retina, lazy loading and much more.",
+  "keywords": [
+    "jquery-plugin",
+    "slider-pro",
+    "responsive-slider"
+  ],
+  "main": [
+    "dist/css/slider-pro.css",
+    "dist/js/jquery.sliderPro.js"
+  ],
+  "ignore": [
+    "docs",
+    "examples",
+    "libs",
+    ".gitignore",
+    "bower.json",
+    "Gruntfile.js",
+    "package.json",
+    "README.md"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/bqworks/slider-pro",
+  "_release": "1.2.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.2.2",
+    "commit": "b373526447a0d36110ae0f7ac83d84476a3cc075"
+  },
+  "_source": "https://github.com/bqworks/slider-pro.git",
+  "_target": "^1.2.2",
+  "_originalSource": "slider-pro",
+  "_direct": true
+}
